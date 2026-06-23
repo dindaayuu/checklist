@@ -1,0 +1,153 @@
+.checklist-page {
+  padding: 20px;
+  padding-bottom: 110px;
+}
+
+.checklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.checklist-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.filter-btn {
+  width: 40px;
+  height: 40px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.area-card {
+  background: white;
+
+  border-radius: 22px;
+
+  overflow: hidden;
+
+  margin-bottom: 16px;
+
+  border: 1px solid #f1f5f9;
+}
+
+.area-header {
+  padding: 22px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.area-header h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.area-header p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.tenant-list {
+  border-top: 1px solid #f1f5f9;
+}
+
+.tenant-item {
+  height: 74px;
+
+  padding: 0 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.tenant-item:last-child {
+  border-bottom: none;
+}
+
+.tenant-item:hover {
+  background: #fafafa;
+}
+
+.tenant-issue {
+  background: #f8faf9;
+}
+
+.tenant-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tenant-number {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  background: #edf7ef;
+
+  color: #0d7a2e;
+
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tenant-left span {
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.status-done {
+  color: #2e7d32;
+}
+
+.status-issue {
+  color: #e67e22;
+}
+
+.status-pending {
+  color: #94a3b8;
+}
+
+.legend {
+  margin-top: 20px;
+
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+
+  font-size: 13px;
+
+  color: #64748b;
+}
+
+.legend div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

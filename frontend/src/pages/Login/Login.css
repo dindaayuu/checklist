@@ -1,0 +1,181 @@
+.login-wrapper {
+  height: 100vh;
+  overflow: hidden;
+
+  background: #f6f7f8;
+
+  display: flex;
+  justify-content: center;
+}
+
+.mobile-container {
+  width: 100%;
+  max-width: 430px;
+  height: 100vh;
+
+  background: #f6f7f8;
+}
+
+.login-content {
+  height: 100%;
+
+  padding: 20px 24px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.login-logo {
+  width: 140px;
+  height: auto;
+
+  display: block;
+  margin: 0 auto;
+
+  object-fit: contain;
+}
+
+.brand-section {
+  text-align: center;
+  margin-top: 6px;
+}
+
+.brand-subtitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+
+  margin: 0;
+}
+
+.brand-desc {
+  color: #6b7280;
+  font-size: 14px;
+
+  margin-top: 4px;
+}
+
+.illustration-box {
+  width: 170px;
+  height: 170px;
+
+  margin: 20px auto;
+
+  background: #edf6ef;
+
+  border-radius: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.illustration-icon {
+  font-size: 72px;
+}
+
+.login-title {
+  text-align: center;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  color: #111827;
+
+  margin-bottom: 8px;
+}
+
+.login-desc {
+  text-align: center;
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  color: #6b7280;
+
+  margin-bottom: 18px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-weight: 600;
+
+  color: #111827;
+}
+
+.form-group input {
+  width: 100%;
+  height: 50px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  padding: 0 16px;
+
+  font-size: 15px;
+
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #0d7a2e;
+}
+
+.tip-box {
+  background: #eaf7ee;
+
+  border-radius: 12px;
+
+  padding: 12px;
+
+  margin-bottom: 18px;
+
+  color: #374151;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+.primary-btn {
+  width: 100%;
+  height: 54px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: #0d7a2e;
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.primary-btn:hover {
+  background: #086426;
+}
+
+.version {
+  margin-top: auto;
+
+  text-align: center;
+
+  color: #9ca3af;
+
+  font-size: 12px;
+
+  padding-top: 12px;
+}

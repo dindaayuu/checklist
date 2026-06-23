@@ -1,0 +1,37 @@
+.app-shell {
+  min-height: 100vh;
+
+  background: #f3f4f6;
+
+  display: flex;
+  justify-content: center;
+}
+
+.phone-frame {
+  width: 100%;
+  max-width: 430px;
+
+  height: 100vh;
+
+  background: white;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+.phone-content {
+  height: calc(100vh - 78px);
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  background: #f6f7f8;
+}
+
+.phone-content::-webkit-scrollbar {
+  display: none;
+}
