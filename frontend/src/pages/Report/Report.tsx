@@ -1,100 +1,176 @@
 import "./Report.css";
 
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import MobileLayout from "../../components/MobileLayout";
 import BottomNav from "../../components/BottomNav";
+import api from "../../services/api";
 
 import {
   Search,
   AlertTriangle,
+  AlertCircle,
   CheckCircle2,
+  Check,
   ChevronRight,
+  ChevronDown,
+  Clock,
+  X,
+  Tablet,
+  LogOut,
 } from "lucide-react";
 
 export default function Report() {
-  const [activeFilter, setActiveFilter] =
-    useState("all");
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [reports, setReports] = useState<any[]>([]);
+  const [selectedReport, setSelectedReport] = useState<any>(null);
+  const [expandedDeviceId, setExpandedDeviceId] = useState<any>(null);
 
-  const location = useLocation();
-  const [selectedReport, setSelectedReport] =
-  useState<any>(null);
+  const handleLogout=()=>{
+    localStorage.removeItem("picName");
+    localStorage.removeItem("userName");
+    window.location.href="/";
+  };
 
-  const newReport = location.state;
+  const getReports = async () => {
+    try {
+      const response = await api.get("/checklist/report");
 
-  const reports = [
-    ...(newReport
-      ? [
-          {
-            tenant: newReport.tenant,
-            area: newReport.area,
-            time: newReport.time,
-            status: "done",
-            detail:
-              "Checklist berhasil disimpan",
-          },
-        ]
-      : []),
+      const data=response.data.data.map((item:any)=>{
 
-    {
-      tenant: "Klamben",
-      area: "Downtown Area",
-      time: "09:45 WIB",
-      status: "issue",
-      detail: "Scanner Mati Total",
-    },
+        const hasReplacement=item.details.some(
+        (d:any)=>!!d.replacement
+        );
+        
+        const hasProblem=
+        item.status==="PROBLEM"||
+        item.details.some(
+        (d:any)=>d.condition==="PROBLEM"
+        )||
+        hasReplacement;
+        
+        return{
+        id:item.id,
+        tenant:item.tenant,
+        area:item.area,
+        pic:item.pic,
+        time:item.finish_time,
+        status:hasProblem?"issue":"done",
+        detail:hasProblem
+        ?"Ada kendala / pergantian perangkat"
+        :"Semua perangkat normal",
+        devices:item.details.map((device:any)=>({
+        device:device.device,
+        barcode:device.barcode,
+        condition:device.condition,
+        problem:device.problem,
+        note:device.note,
+        replacement:device.replacement
+        }))
+        };
+        
+        });
 
-    {
-      tenant: "Submarine",
-      area: "Pesisir Area",
-      time: "10:15 WIB",
-      status: "done",
-      detail: "Semua Perangkat Normal",
-    },
+      setReports(data);
 
-    {
-      tenant: "GG Merchandise",
-      area: "Balantara Area",
-      time: "11:30 WIB",
-      status: "issue",
-      detail: "Printer Tidak Terbaca",
-    },
-  ];
+    } catch(error) {
+      console.log("REPORT ERROR", error);
+    }
+  };
 
-  const filteredReports =
-    reports.filter((item) => {
-      if (activeFilter === "issue")
-        return item.status === "issue";
 
-      if (activeFilter === "done")
-        return item.status === "done";
+  useEffect(() => {
+    getReports();
 
-      return true;
-    });
+    const interval = setInterval(() => {
+      getReports();
+    },5000);
+
+    return () => clearInterval(interval);
+  },[]);
+
+
+  const filteredReports = reports.filter((item:any) => {
+
+    if(activeFilter === "issue"){
+      return item.status === "issue";
+    }
+
+    if(activeFilter === "done"){
+      return item.status === "done";
+    }
+
+    return true;
+
+  });
+
+  useEffect(() => {
+    if(!selectedReport){
+      setExpandedDeviceId(null);
+      return;
+    }
+  
+    const issueDevice = selectedReport.devices.find(
+      (device:any)=>
+        device.condition === "PROBLEM" ||
+        !!device.replacement
+    );
+  
+    setExpandedDeviceId(
+      issueDevice
+        ? issueDevice.barcode
+        : null
+    );
+  
+  },[selectedReport]);
+
+
+  const toggleDevice = (id:any) => {
+
+    setExpandedDeviceId((prev:any) =>
+      prev === id
+        ? null
+        : id
+    );
+
+  };
 
   return (
     <MobileLayout>
       <div className="report-page">
 
-        <h2 className="report-title">
-          Laporan Checklist
-        </h2>
+      <div className="report-header">
 
-        <p className="report-subtitle">
-          Riwayat hasil pengecekan tenant
-        </p>
+        <div>
+          <h2 className="report-title">
+            Laporan Checklist
+          </h2>
+
+          <p className="report-subtitle">
+            Riwayat hasil pengecekan tenant
+          </p>
+        </div>
+
+
+        <button
+          className="logout-btn"
+          onClick={handleLogout}
+        >
+          <LogOut size={18}/>
+        </button>
+
+        </div>
+
 
         <div className="search-box">
-
-          <Search size={18} />
+          <Search size={18}/>
 
           <input
             type="text"
             placeholder="Cari tenant..."
           />
-
         </div>
+
 
         <div className="filter-group">
 
@@ -104,12 +180,11 @@ export default function Report() {
                 ? "filter-btn active"
                 : "filter-btn"
             }
-            onClick={() =>
-              setActiveFilter("all")
-            }
+            onClick={() => setActiveFilter("all")}
           >
             Semua
           </button>
+
 
           <button
             className={
@@ -117,12 +192,11 @@ export default function Report() {
                 ? "filter-btn active"
                 : "filter-btn"
             }
-            onClick={() =>
-              setActiveFilter("issue")
-            }
+            onClick={() => setActiveFilter("issue")}
           >
             Kendala
           </button>
+
 
           <button
             className={
@@ -130,47 +204,40 @@ export default function Report() {
                 ? "filter-btn active"
                 : "filter-btn"
             }
-            onClick={() =>
-              setActiveFilter("done")
-            }
+            onClick={() => setActiveFilter("done")}
           >
             Selesai
           </button>
 
         </div>
 
-        {filteredReports.map((item) => (
+
+        {filteredReports.map((item:any) => (
 
           <div
-            key={
-              item.tenant +
-              item.time
-            }
             className="report-card"
+            key={item.id}
           >
 
             <div className="report-top">
 
               <div
-                className={`report-icon ${
-                  item.status === "issue"
+                className={
+                  `report-icon ${
+                    item.status === "issue"
                     ? "issue"
                     : "done"
-                }`}
+                  }`
+                }
               >
 
-                {item.status ===
-                "issue" ? (
-                  <AlertTriangle
-                    size={22}
-                  />
-                ) : (
-                  <CheckCircle2
-                    size={22}
-                  />
-                )}
+                {item.status === "issue"
+                  ? <AlertTriangle size={22}/>
+                  : <CheckCircle2 size={22}/>
+                }
 
               </div>
+
 
               <div className="report-info">
 
@@ -186,6 +253,7 @@ export default function Report() {
 
             </div>
 
+
             <div className="report-detail">
 
               <span className="time">
@@ -198,17 +266,20 @@ export default function Report() {
 
             </div>
 
+
             <div
               className="detail-link"
               onClick={() =>
                 setSelectedReport(item)
               }
             >
-                <span>
+
+              <span>
                 Lihat Detail
               </span>
 
-              <ChevronRight size={16} />
+              <ChevronRight size={16}/>
+
             </div>
 
           </div>
@@ -216,148 +287,310 @@ export default function Report() {
         ))}
 
       </div>
+
+
       {selectedReport && (
+
         <div
           className="detail-overlay"
-          onClick={() => setSelectedReport(null)}
+          onClick={() =>
+            setSelectedReport(null)
+          }
         >
+
           <div
-            className="detail-sheet"
-            onClick={(e) => e.stopPropagation()}
+            className="detail-sheet modern"
+            onClick={(e)=>
+              e.stopPropagation()
+            }
           >
+
+            <div className="sheet-handle"/>
+
+
             <button
               className="detail-close"
-              onClick={() => setSelectedReport(null)}
+              onClick={() =>
+                setSelectedReport(null)
+              }
             >
-              ✕
+              <X size={20}/>
             </button>
 
-            <h3>{selectedReport.tenant}</h3>
 
-            <p className="sheet-area">
-              {selectedReport.area}
-            </p>
+            <div className="sheet-header">
 
-            <p className="sheet-time">
-              {selectedReport.time}
-            </p>
+              <div
+                className={
+                  `header-icon ${
+                    selectedReport.status === "issue"
+                    ? "issue"
+                    : "done"
+                  }`
+                }
+              >
 
-            <div
-              className={`sheet-status ${
-                selectedReport.status === "issue"
-                  ? "issue"
-                  : "done"
-              }`}
-            >
-              {selectedReport.status === "issue"
-                ? "🟠 Selesai Dengan Kendala"
-                : "🟢 Selesai Tanpa Kendala"}
-            </div>
+                {selectedReport.status === "issue"
+                  ? <AlertTriangle size={26}/>
+                  : <CheckCircle2 size={26}/>
+                }
 
-            <div className="sheet-section">
-              <h4>Checklist Perangkat</h4>
-
-              <div className="device-item">
-                <span>✅</span>
-                <p>Tablet POS</p>
               </div>
 
-              <div className="device-item">
+
+              <div className="header-info">
+
+                <h2>
+                  {selectedReport.tenant}
+                </h2>
+
                 <span>
-                  {selectedReport.status === "issue"
-                    ? "❌"
-                    : "✅"}
+                  {selectedReport.area}
                 </span>
-                <p>Scanner Barcode</p>
-              </div>
 
-              <div className="device-item">
-                <span>✅</span>
-                <p>Printer Struk</p>
-              </div>
 
-              <div className="device-item">
-                <span>✅</span>
-                <p>Charger</p>
-              </div>
-            </div>
+                <div
+                  className={
+                    `sheet-status ${
+                      selectedReport.status === "issue"
+                      ? "issue"
+                      : "done"
+                    }`
+                  }
+                >
 
-            {selectedReport.status === "issue" && (
-              <div className="replacement-card">
-                <h4>
-                  🔄 Pergantian Device
-                </h4>
+                  <span className="status-dot"/>
 
-                <div className="replacement-box">
-
-                  <div className="replacement-section">
-                    <span className="replacement-label">
-                      Device Bermasalah
-                    </span>
-
-                    <h5>
-                      ❌ Scanner Barcode
-                    </h5>
-
-                    <p>
-                      SN : SCN-001
-                    </p>
-                  </div>
-
-                  <div className="replacement-divider" />
-
-                  <div className="replacement-section">
-                    <span className="replacement-label">
-                      Device Pengganti
-                    </span>
-
-                    <h5>
-                      ✅ Scanner Barcode
-                    </h5>
-
-                    <p>
-                      SN : SCN-015
-                    </p>
-                  </div>
-
-                  <div className="replacement-divider" />
-
-                  <div className="replacement-meta">
-
-                    <div className="meta-row">
-                      <span>PIC</span>
-                      <strong>
-                        Dani Saputra
-                      </strong>
-                    </div>
-
-                    <div className="meta-row">
-                      <span>Waktu</span>
-                      <strong>
-                        09:52 WIB
-                      </strong>
-                    </div>
-
-                  </div>
+                  {selectedReport.status === "issue"
+                    ? "Selesai Dengan Kendala"
+                    : "Selesai Tanpa Kendala"
+                  }
 
                 </div>
+
+
+                <p className="sheet-time">
+                  <Clock size={13}/>
+                  {selectedReport.time}
+                </p>
+
               </div>
-            )}
 
-            <div className="sheet-section last-section">
-              <h4>📝 Catatan</h4>
-
-              <p className="sheet-note">
-                {selectedReport.status === "issue"
-                  ? "Scanner mati total dan diganti menggunakan unit cadangan."
-                  : "Semua perangkat dalam kondisi baik."}
-              </p>
             </div>
 
+
+            <div className="sheet-section">
+
+              <h4>
+                Checklist Perangkat
+              </h4>
+
+
+              {selectedReport.devices.map((device:any) => {
+
+              const isIssue =
+                device.condition === "PROBLEM" ||
+                !!device.replacement;
+                const isOpen =
+                  expandedDeviceId === device.barcode;
+
+
+                return (
+
+                  <div
+                    key={device.barcode}
+                    className={
+                      `device-card ${
+                        isIssue
+                        ? "issue"
+                        : ""
+                      }`
+                    }
+                  >
+
+                    <div
+                      className="device-row"
+                      onClick={() =>
+                        isIssue &&
+                        toggleDevice(device.barcode)
+                      }
+                    >
+
+                      <div className="device-left">
+
+                        <div
+                          className={
+                            `device-icon ${
+                              isIssue
+                              ? "issue"
+                              : ""
+                            }`
+                          }
+                        >
+                          <Tablet size={20}/>
+                        </div>
+
+
+                        <div>
+
+                          <h5>
+                            {device.device}
+                          </h5>
+
+                          <span>
+                            {device.barcode}
+                          </span>
+
+                        </div>
+
+                      </div>
+
+
+                      <div className="device-right">
+
+                        <span
+                          className={
+                            isIssue
+                            ? "badge-problem"
+                            : "badge-normal"
+                          }
+                        >
+
+                              {device.replacement
+                              ?"Diganti"
+                              :device.condition==="PROBLEM"
+                              ?"Bermasalah"
+                              :"Normal"}
+
+                        </span>
+
+
+                        <div
+                          className={
+                            `status-circle ${
+                              isIssue
+                              ? "issue"
+                              : "done"
+                            }`
+                          }
+                        >
+
+                          {isIssue
+                            ? <AlertCircle size={14}/>
+                            : <Check size={14}/>
+                          }
+
+                        </div>
+
+
+                        <ChevronDown
+                          size={18}
+                          className={
+                            isOpen
+                            ? "device-chevron rotated"
+                            : "device-chevron"
+                          }
+                        />
+
+                      </div>
+
+                    </div>
+
+
+                    {isIssue && isOpen && (
+                        <div className="problem-detail">
+
+                          <div className="problem-row">
+                            <small>Kendala</small>
+                            <strong>
+                              {device.problem ?? "-"}
+                            </strong>
+                          </div>
+
+
+                          <div className="problem-row">
+                            <small>Catatan</small>
+                            <strong>
+                              {device.note ?? "-"}
+                            </strong>
+                          </div>
+
+
+                          {device.replacement && (
+
+                            <div className="replacement-box">
+
+                              <h4>
+                                🔄 Pergantian Device
+                              </h4>
+
+
+                              <div className="problem-row">
+                                <small>Device Lama</small>
+
+                                <strong>
+                                  {device.replacement.old_device}
+                                  <br/>
+                                  {device.replacement.old_code}
+                                </strong>
+                              </div>
+
+
+                              <div className="problem-row">
+                                <small>Device Baru</small>
+
+                                <strong>
+                                  {device.replacement.new_device}
+                                  <br/>
+                                  {device.replacement.new_code}
+                                </strong>
+                              </div>
+
+
+                              <div className="problem-row">
+                                <small>Diganti Oleh</small>
+
+                                <strong>
+                                  {device.replacement.replaced_by}
+                                </strong>
+                              </div>
+
+                            </div>
+
+                          )}
+
+
+                        </div>
+                      )}
+
+                  </div>
+
+                );
+
+              })}
+
+            </div>
+
+
+            <button
+              className="close-button"
+              onClick={() =>
+                setSelectedReport(null)
+              }
+            >
+              Tutup
+            </button>
+
           </div>
+
         </div>
+
       )}
-      <BottomNav />
+
+
+      <BottomNav/>
+
     </MobileLayout>
   );
+
 }

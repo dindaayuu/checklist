@@ -1,11 +1,19 @@
-.login-wrapper {
-  height: 100vh;
-  overflow: hidden;
+/* ===========================
+   LOGIN PAGE
+=========================== */
 
-  background: #f6f7f8;
+* {
+  box-sizing: border-box;
+}
+
+.login-wrapper {
+  width: 100%;
+  height: 100vh;
+  background: #f4f7f3;
 
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 
 .mobile-container {
@@ -13,169 +21,313 @@
   max-width: 430px;
   height: 100vh;
 
-  background: #f6f7f8;
-}
-
-.login-content {
-  height: 100%;
-
-  padding: 20px 24px;
+  background: #f7faf7;
 
   display: flex;
   flex-direction: column;
+
+  position: relative;
+}
+
+/* ===========================
+   HERO
+=========================== */
+
+.hero {
+  position: relative;
+
+  width: 100%;
+  height: 310px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  overflow: hidden;
 }
 
 .login-logo {
-  width: 140px;
+  position: absolute;
+
+  top: 25px;      
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 165px;
   height: auto;
 
-  display: block;
-  margin: 0 auto;
-
-  object-fit: contain;
-}
-
-.brand-section {
-  text-align: center;
-  margin-top: 6px;
-}
-
-.brand-subtitle {
-  font-size: 24px;
-  font-weight: 700;
-  color: #111827;
+  z-index: 10;
 
   margin: 0;
 }
 
-.brand-desc {
-  color: #6b7280;
-  font-size: 14px;
+.hero-bg {
+  position: absolute;
 
-  margin-top: 4px;
+  top: 5px;
+  left: 0;
+
+  width: 100%;
+  height: calc(100% + 55px);
+
+  object-fit: cover;
+  object-position: center top;
+
+  display: block;
 }
 
-.illustration-box {
-  width: 170px;
-  height: 170px;
+/* ===========================
+   CARD
+=========================== */
 
-  margin: 20px auto;
+.login-card {
+  flex: 1;
 
-  background: #edf6ef;
+  background: #ffffff;
 
-  border-radius: 24px;
+  margin-top: -72px;
+
+  border-radius: 38px 38px 0 0;
+
+  padding: 62px 26px 38px;
+
+  position: relative;
+
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, .05);
+}
+
+/* ===========================
+   FLOATING ICON
+=========================== */
+
+.floating-icon {
+  width: 86px;
+  height: 86px;
+
+  background: #ffffff;
+
+  border-radius: 50%;
+
+  position: absolute;
+
+  top: -43px;
+  left: 50%;
+
+  transform: translateX(-50%);
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  color: #1d8b4f;
+
+  border: 6px solid #f7faf7;
+
+  box-shadow: 0 15px 30px rgba(0, 0, 0, .12);
 }
 
-.illustration-icon {
-  font-size: 72px;
-}
+/* ===========================
+   TITLE
+=========================== */
 
 .login-title {
   text-align: center;
 
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
 
-  color: #111827;
+  color: #1f2937;
 
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .login-desc {
   text-align: center;
 
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15px;
+
+  line-height: 1.7;
 
   color: #6b7280;
 
-  margin-bottom: 18px;
+  margin-bottom: 34px;
 }
 
+/* ===========================
+   FORM
+=========================== */
+
 .form-group {
-  margin-bottom: 14px;
+  margin-bottom: 22px;
 }
 
 .form-group label {
   display: block;
 
-  margin-bottom: 8px;
-
+  font-size: 14px;
   font-weight: 600;
-
-  color: #111827;
-}
-
-.form-group input {
-  width: 100%;
-  height: 50px;
-
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-
-  padding: 0 16px;
-
-  font-size: 15px;
-
-  box-sizing: border-box;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #0d7a2e;
-}
-
-.tip-box {
-  background: #eaf7ee;
-
-  border-radius: 12px;
-
-  padding: 12px;
-
-  margin-bottom: 18px;
 
   color: #374151;
 
+  margin-bottom: 10px;
+}
+
+.input-wrapper {
+  width: 100%;
+  height: 56px;
+
+  display: flex;
+  align-items: center;
+
+  background: #ffffff;
+
+  border: 1px solid #dbe4dc;
+
+  border-radius: 18px;
+
+  transition: .25s;
+}
+
+.input-wrapper:focus-within {
+  border-color: #2E7D32;
+
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, .10);
+}
+
+.input-icon {
+  margin-left: 18px;
+
+  color: #6b7280;
+}
+
+.input-wrapper input {
+  flex: 1;
+
+  height: 100%;
+
+  border: none;
+  outline: none;
+
+  padding: 0 18px;
+
+  font-size: 15px;
+
+  background: transparent;
+}
+
+/* ===========================
+   TIP
+=========================== */
+
+.tip-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  padding: 16px;
+
+  background: #eef8f0;
+
+  border-radius: 16px;
+
+  color: #35543d;
+
   font-size: 13px;
 
-  line-height: 1.5;
+  line-height: 1.6;
+
+  margin-bottom: 28px;
 }
+
+.tip-icon {
+  color: #2E7D32;
+
+  flex-shrink: 0;
+
+  margin-top: 2px;
+}
+
+/* ===========================
+   BUTTON
+=========================== */
 
 .primary-btn {
   width: 100%;
-  height: 54px;
+  height: 58px;
 
   border: none;
-  border-radius: 14px;
 
-  background: #0d7a2e;
-
-  color: white;
-
-  font-size: 16px;
-  font-weight: 600;
+  border-radius: 18px;
 
   cursor: pointer;
 
-  transition: 0.2s;
+  font-size: 16px;
+  font-weight: 700;
+
+  color: white;
+
+  background: linear-gradient(
+    180deg,
+    #39a557,
+    #23733d
+  );
+
+  transition: .25s;
+
+  box-shadow: 0 15px 25px rgba(35, 115, 61, .25);
 }
 
 .primary-btn:hover {
-  background: #086426;
+  transform: translateY(-2px);
+
+  box-shadow: 0 18px 30px rgba(35, 115, 61, .30);
 }
 
+.primary-btn:active {
+  transform: scale(.98);
+}
+
+/* ===========================
+   VERSION
+=========================== */
+
 .version {
-  margin-top: auto;
+  display: none;
+}
 
-  text-align: center;
+/* ===========================
+   MOBILE
+=========================== */
 
-  color: #9ca3af;
+@media (max-height: 700px) {
 
-  font-size: 12px;
+  .hero {
+    height: 280px;
+  }
 
-  padding-top: 12px;
+  .login-logo {
+    width: 150px;
+    margin-top: 42px;
+  }
+
+  .login-card {
+    margin-top: -60px;
+    padding: 56px 22px 30px;
+  }
+
+  .floating-icon {
+    width: 78px;
+    height: 78px;
+    top: -39px;
+  }
+
+  .login-title {
+    font-size: 22px;
+  }
+
+  .login-desc {
+    margin-bottom: 24px;
+  }
+
 }

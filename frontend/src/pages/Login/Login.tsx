@@ -1,27 +1,38 @@
 import "./Login.css";
 import logoSaloka from "../../assets/logo-saloka.png";
+import heroBg from "../../assets/hero-bg.png";
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import {
+  ClipboardCheck,
+  User,
+  Lightbulb,
+} from "lucide-react";
 
 export default function Login() {
   const [name, setName] = useState("");
+
   const navigate = useNavigate();
+
   const handleLogin = () => {
     if (!name.trim()) {
       alert("Nama harus diisi");
       return;
     }
-  
+
     localStorage.setItem("userName", name);
-  
+
     navigate("/dashboard");
   };
 
   return (
     <div className="login-wrapper">
+
       <div className="mobile-container">
-        <div className="login-content">
+
+        <div className="hero">
 
           <img
             src={logoSaloka}
@@ -29,25 +40,28 @@ export default function Login() {
             className="login-logo"
           />
 
-          <div className="brand-section">
-            <h2 className="brand-subtitle">
-              SATS
-            </h2>
+          <img
+            src={heroBg}
+            alt="Hero"
+            className="hero-bg"
+          />
 
-            <p className="brand-desc">
-              Smart Asset Tracking Saloka
-            </p>
+        </div>
+
+        <div className="login-card">
+
+          <div className="floating-icon">
+
+            <ClipboardCheck
+              size={38}
+              strokeWidth={2.2}
+            />
+
           </div>
 
-          <div className="illustration-box">
-            <div className="illustration-icon">
-              📋
-            </div>
-          </div>
-
-          <h3 className="login-title">
+          <h2 className="login-title">
             Masuk Sebagai PIC Checklist
-          </h3>
+          </h2>
 
           <p className="login-desc">
             Masukkan nama Anda untuk memulai
@@ -55,21 +69,43 @@ export default function Login() {
           </p>
 
           <div className="form-group">
-            <label>Nama Anda</label>
 
-            <input
-              type="text"
-              placeholder="Ketik nama Anda"
-              value={name}
-              onChange={(e) =>
-                setName(e.target.value)
-              }
-            />
+            <label>
+              Nama Anda
+            </label>
+
+            <div className="input-wrapper">
+
+              <User
+                size={20}
+                className="input-icon"
+              />
+
+              <input
+                type="text"
+                placeholder="Ketik nama Anda"
+                value={name}
+                onChange={(e) =>
+                  setName(e.target.value)
+                }
+              />
+
+            </div>
+
           </div>
 
           <div className="tip-box">
-            💡 Gunakan nama asli agar laporan
-            checklist tercatat dengan benar.
+
+            <Lightbulb
+              size={18}
+              className="tip-icon"
+            />
+
+            <span>
+              Gunakan nama asli agar laporan
+              checklist tercatat dengan benar.
+            </span>
+
           </div>
 
           <button
@@ -80,11 +116,13 @@ export default function Login() {
           </button>
 
           <p className="version">
-            Versi 1.0.0
+            Version 1.0.0
           </p>
 
         </div>
+
       </div>
+
     </div>
   );
 }

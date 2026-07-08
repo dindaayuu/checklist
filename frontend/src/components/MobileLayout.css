@@ -7,17 +7,13 @@
   justify-content: center;
 }
 
-.phone-frame {
-  width: 100%;
-  max-width: 430px;
-
-  height: 100vh;
-
-  background: white;
-
-  position: relative;
-
-  overflow: hidden;
+.phone-frame{
+  width:100%;
+  max-width:430px;
+  height:100vh;
+  background:#f6f7f8;
+  position:relative;
+  overflow:hidden;
 }
 
 .phone-content {
@@ -32,6 +28,11 @@
   background: #f6f7f8;
 }
 
-.phone-content::-webkit-scrollbar {
-  display: none;
+.phone-content{
+  min-height:100vh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  background:#f6f7f8;
 }

@@ -1,4 +1,14 @@
 .dashboard-page {
+  --green-900: #14532d;
+  --green-700: #1b7a3d;
+  --green-600: #21935a;
+  --green-100: #e6f4ea;
+  --green-050: #f2f9f4;
+  --muted: #64748b;
+  --muted-light: #94a3b8;
+  --card-shadow: 0 1px 2px rgba(15, 23, 20, 0.04),
+    0 10px 24px -16px rgba(15, 42, 25, 0.18);
+
   padding: 20px;
   padding-bottom: 100px;
 
@@ -18,10 +28,12 @@
 .welcome-title {
   font-size: 28px;
   font-weight: 700;
+
+  color: var(--green-900);
 }
 
 .welcome-subtitle {
-  color: #64748b;
+  color: var(--muted);
 
   margin-top: 4px;
 }
@@ -33,52 +45,95 @@
   border: none;
   border-radius: 12px;
 
-  background: white;
+  background: transparent;
+
+  color: var(--green-900);
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  cursor: pointer;
 }
 
 /* PROGRESS */
 
 .progress-card {
-  background: linear-gradient(
-    135deg,
-    #2e7d32,
-    #1b5e20
-  );
+  position: relative;
+  overflow: hidden;
 
-  border-radius: 22px;
+  background: #ffffff;
+
+  border-radius: 24px;
 
   padding: 22px;
 
-  color: white;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  box-shadow: var(--card-shadow);
 
   margin-bottom: 24px;
 }
 
+.progress-card-decoration {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 65%;
+
+  pointer-events: none;
+}
+
+.progress-card-decoration svg {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+}
+
+.progress-card-decoration .wave-back {
+  fill: var(--green-050);
+}
+
+.progress-card-decoration .wave-front {
+  fill: var(--green-100);
+}
+
+.progress-content {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .progress-left p {
-  opacity: 0.9;
+  color: var(--muted);
+
+  font-size: 14px;
 }
 
 .progress-left h2 {
-  font-size: 48px;
-  font-weight: 700;
+  font-size: 44px;
+  font-weight: 800;
+
+  color: var(--green-900);
 
   margin: 6px 0;
 }
 
 .progress-left h2 span {
-  font-size: 28px;
+  font-size: 22px;
+  font-weight: 600;
+
+  color: var(--muted-light);
 }
 
 .progress-left small {
-  opacity: 0.9;
+  color: var(--muted);
+
+  font-size: 13px;
 }
 
 .circle-progress {
@@ -97,14 +152,14 @@
 
 .circle-bg {
   fill: none;
-  stroke: rgba(255,255,255,0.25);
+  stroke: var(--green-100);
   stroke-width: 10;
 }
 
 .circle-fill {
   fill: none;
 
-  stroke: white;
+  stroke: var(--green-600);
   stroke-width: 10;
 
   stroke-linecap: round;
@@ -122,6 +177,7 @@
   transform: translate(-50%, -50%);
 
   font-weight: 700;
+  color: var(--green-900);
 }
 
 /* SECTION */
@@ -142,6 +198,8 @@
 
   padding: 18px;
 
+  box-shadow: var(--card-shadow);
+
   margin-bottom: 14px;
 }
 
@@ -160,11 +218,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  flex-shrink: 0;
 }
 
 .downtown {
-  background: #edf7ef;
-  color: #2e7d32;
+  background: var(--green-100);
+  color: var(--green-700);
 }
 
 .pesisir {
@@ -186,7 +246,7 @@
 }
 
 .route-content p {
-  color: #64748b;
+  color: var(--muted);
 
   font-size: 13px;
 
@@ -206,14 +266,18 @@
 .progress-fill {
   height: 100%;
 
-  background: #2e7d32;
+  background: var(--green-600);
 }
 
-.route-item span {
-  font-size: 13px;
-  font-weight: 600;
+.route-percent {
+  font-size: 14px;
+  font-weight: 700;
 
-  color: #64748b;
+  color: var(--muted-light);
+}
+
+.route-percent.positive {
+  color: var(--green-700);
 }
 
 /* BUTTON */
@@ -225,7 +289,7 @@
   border: none;
   border-radius: 16px;
 
-  background: #2e7d32;
+  background: var(--green-700);
 
   color: white;
 
@@ -268,7 +332,7 @@
 
   overflow-y: auto;
 
-  animation: slideUp .25s ease;
+  animation: slideUp 0.25s ease;
 }
 
 @keyframes slideUp {
@@ -295,11 +359,13 @@
   font-size: 22px;
   font-weight: 700;
 
+  color: var(--green-900);
+
   margin-bottom: 4px;
 }
 
 .popup-header p {
-  color: #64748b;
+  color: var(--muted);
 }
 
 .popup-close {
@@ -337,7 +403,7 @@
 }
 
 .status-indicator.done {
-  background: #2e7d32;
+  background: var(--green-600);
 }
 
 .status-indicator.pending {
@@ -360,5 +426,5 @@
 
   font-size: 13px;
 
-  color: #64748b;
+  color: var(--muted);
 }

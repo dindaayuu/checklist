@@ -3,10 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import RouteMap from "./pages/RouteMap/RouteMap";
-import TenantDetail from "./pages/TenantDetail/TenantDetail";
-import Checklist from "./pages/Checklist/Checklist";
 import Report from "./pages/Report/Report";
-import ScanDevice from "./pages/ScanDevice/ScanDevice";
+import TenantDetail from "./pages/TenantDetail/TenantDetail";
 
 function App() {
   return (
@@ -29,25 +27,15 @@ function App() {
         />
 
         <Route
-          path="/tenant-detail"
-          element={<TenantDetail />}
-        />
-
-        <Route
-          path="/checklist"
-          element={<Checklist />}
-        />
-
-        <Route
-          path="/Report"
+          path="/report"
           element={<Report />}
         />
 
         <Route
-          path="/scan-device"
-          element={<ScanDevice />}
+          path="/tenant-detail/:id"
+          element={<TenantDetail />}
         />
-        
+
       </Routes>
     </BrowserRouter>
   );

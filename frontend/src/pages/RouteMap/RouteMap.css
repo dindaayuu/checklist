@@ -42,41 +42,43 @@
   cursor: pointer;
 }
 
-/* MAP */
-
 .map-card {
   flex: 1;
-
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  border: 1px solid #eef2f6;
   position: relative;
-
-  border-radius: 28px;
-
   overflow: hidden;
-
-  background: white;
-
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.map-container {
-  width: 100%;
-  height: 100%;
+.map-stage {
+  display: flex;
+  justify-content: center;
+}
 
+.map-image-wrapper {
   position: relative;
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
 }
 
 .map-image {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-
   display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 /* MARKERS */
 
-.marker {
+.map-marker {
   position: absolute;
 
   width: 28px;
@@ -101,62 +103,55 @@
 
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
 
+  transform: translate(-50%, -50%);
+
   transition: all 0.2s ease;
 }
 
-.marker:hover {
-  transform: scale(1.15);
+.map-marker:hover {
+  transform: translate(-50%, -50%) scale(1.15);
 }
 
-.marker.done {
+.map-marker.done {
   background: #2e7d32;
+  color: white !important;
 }
 
-.marker.issue {
+.map-marker.issue {
   background: #ea580c;
+  color: white !important;
 }
 
-.marker.pending {
+.map-marker.pending {
   background: #94a3b8;
+  color: white !important;
 }
 
 /* OVERLAY */
 
-.tenant-overlay {
-  position: absolute;
-  inset: 0;
-
-  background: rgba(0, 0, 0, 0.18);
-
-  display: flex;
-  align-items: flex-end;
-
-  padding: 16px;
-
-  z-index: 999;
+.tenant-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.18);
+  display:flex;
+  align-items:flex-end;
+  padding:16px 16px 75px;
+  z-index:999;
 }
 
 /* POPUP */
 
-.tenant-card {
-  width: 100%;
-
-  background: white;
-
-  border-radius: 20px;
-
-  padding: 16px;
-
-  position: relative;
-
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-
-  animation: slideUp 0.25s ease;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 14px;
+.tenant-card{
+  width:100%;
+  background:white;
+  border-radius:20px;
+  padding:16px;
+  position:relative;
+  box-shadow:0 12px 30px rgba(0,0,0,0.15);
+  animation:slideUp .25s ease;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
 
 @keyframes slideUp {

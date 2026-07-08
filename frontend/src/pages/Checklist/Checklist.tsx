@@ -153,7 +153,7 @@ export default function Checklist() {
                       }`}
                       onClick={() =>
                         navigate(
-                          "/tenant-detail"
+                          `/tenant-detail/${tenant.id}`
                         )
                       }
                     >
