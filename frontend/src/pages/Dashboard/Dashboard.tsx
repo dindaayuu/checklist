@@ -21,295 +21,123 @@ import {
 
 import api from "../../api/axios";
 
-
 export default function Dashboard() {
-
-
   const navigate = useNavigate();
 
-
-  const [
-    selectedArea,
-    setSelectedArea,
-  ] =
+  const [selectedArea,setSelectedArea] =
     useState<any>(null);
 
+  const [dashboard,setDashboard] =
+    useState<any>(null);
 
-  const [
-    areas,
-    setAreas,
-  ] =
-    useState<any[]>([]);
-
-
-  const [
-    loading,
-    setLoading,
-  ] =
+  const [loading,setLoading] =
     useState(true);
+
+
   const userName =
-    localStorage.getItem(
-      "userName"
-    ) || "";
-  useEffect(() => {
+    localStorage.getItem("userName")
+    || "";
 
 
-    getTenants();
+  useEffect(()=>{
+    loadDashboard();
+  },[]);
 
 
-  }, []);
-
-
-
-
-  const getTenants = async () => {
-
-
-    try {
-
+  const loadDashboard = async()=>{
+    try{
 
       const response =
         await api.get(
-          "/checklist/tenants"
+          "/checklist/dashboard"
         );
 
-
-
-      const tenants =
-        response.data.data;
-
-
-
-      const grouped =
-        tenants.reduce(
-          (
-            result: any,
-            tenant: any
-          ) => {
-
-
-            const areaName =
-              tenant.area;
-
-
-
-            if (
-              !result[areaName]
-            ) {
-
-
-              result[areaName] = {
-
-
-                id:
-                  areaName,
-
-
-                name:
-                  `${areaName} Area`,
-
-
-                icon:
-                  getAreaIcon(
-                    areaName
-                  ),
-
-
-                checked:
-                  tenants.filter(
-                    (item:any) =>
-                      item.area ===
-                      areaName &&
-                      item.status ===
-                      "done"
-                  ).length,
-
-
-                total: 0,
-
-
-                progress: 0,
-
-
-                tenants: [],
-
-
-              };
-
-
-            }
-
-
-
-
-            result[
-              areaName
-            ].tenants.push({
-
-
-              id:
-                tenant.id,
-
-
-              name:
-                tenant.name,
-
-
-              status:
-                tenant.status ===
-                "done"
-                  ? "Selesai"
-                  : tenant.status ===
-                    "issue"
-                  ? "Kendala"
-                  : "Belum Dicek",
-
-
-            });
-
-
-
-            result[
-              areaName
-            ].total =
-              result[
-                areaName
-              ].tenants.length;
-
-
-
-
-            result[
-              areaName
-            ].progress =
-              Math.round(
-                (
-                  result[
-                    areaName
-                  ].checked /
-                  result[
-                    areaName
-                  ].total
-                ) *
-                  100
-              );
-
-
-
-            return result;
-
-
-          },
-
-          {}
-
-        );
-
-
-
-
-      setAreas(
-        Object.values(
-          grouped
-        )
+      setDashboard(
+        response.data
       );
 
-
-
-    } catch (error) {
-
+    }catch(error){
 
       console.log(
-        "API ERROR",
+        "Dashboard error",
         error
       );
 
-
-    } finally {
-
+    }finally{
 
       setLoading(false);
 
-
     }
-
-
   };
 
 
+  const getAreaIcon=(area:string)=>{
 
-
-
-  const getAreaIcon = (
-    area:string
-  ) => {
-
-
-    if (
+    if(
       area === "Pesisir"
     )
-      return "pesisir";
+    return "pesisir";
 
-
-    if (
+    if(
       area === "Balalantara"
     )
-      return "balantara";
-
+    return "balantara";
 
     return "downtown";
 
+  };
+
+
+  const getStatusClass=(
+    status:string
+  )=>{
+
+    if(status==="DONE")
+      return "done";
+
+    if(status==="PROBLEM")
+      return "issue";
+
+    return "pending";
 
   };
 
-  if (loading) {
+
+  if(loading){
     return null;
   }
 
-  return (
+
+  return(
 
     <MobileLayout>
-
 
       <div className="dashboard-page">
 
 
         <div className="dashboard-header">
 
-
           <div>
 
-
             <h1 className="welcome-title">
-
               Halo, {userName} 👋
-
             </h1>
 
-
             <p className="welcome-subtitle">
-
               PIC Checklist IT
-
             </p>
 
-
           </div>
-
 
         </div>
 
 
-
-
         <div className="progress-card">
-
 
           <div className="progress-content">
 
 
             <div className="progress-left">
-
 
               <p>
                 Progress Hari Ini
@@ -318,19 +146,11 @@ export default function Dashboard() {
 
               <h2>
 
-                0
+                {dashboard.checkedToday}
 
                 <span>
                   /
-                  {areas.reduce(
-                    (
-                      total,
-                      area
-                    ) =>
-                      total +
-                      area.total,
-                    0
-                  )}
+                  {dashboard.totalTenant}
                 </span>
 
               </h2>
@@ -340,16 +160,12 @@ export default function Dashboard() {
                 Tenant sudah dicek
               </small>
 
-
             </div>
-
 
 
             <div className="circle-progress">
 
-
               <svg viewBox="0 0 120 120">
-
 
                 <circle
                   cx="60"
@@ -358,95 +174,83 @@ export default function Dashboard() {
                   className="circle-bg"
                 />
 
-
                 <circle
                   cx="60"
                   cy="60"
                   r="50"
                   className="circle-fill"
-                />
 
+                  style={{
+                    strokeDashoffset:
+                    314 -
+                    (
+                      314 *
+                      dashboard.progress
+                    ) / 100
+                  }}
+                />
 
               </svg>
 
 
               <span>
-                0%
+                {dashboard.progress}%
               </span>
 
 
             </div>
 
-
           </div>
-
 
         </div>
 
 
-
-
-
         <h3 className="section-title">
-
           Route Hari Ini
-
         </h3>
 
 
-
-
-        {areas.map(
-          (area:any) => (
-
+        {dashboard.areas.map(
+          (area:any)=>(
 
             <div
-
-              key={
-                area.id
-              }
-
+              key={area.name}
               className="
-                route-card
-                clickable
+              route-card
+              clickable
               "
 
-              onClick={() =>
-                setSelectedArea(
-                  area
-                )
+              onClick={()=>
+                setSelectedArea(area)
               }
-
             >
-
 
               <div className="route-item">
 
 
                 <div
                   className={
-                    `route-icon ${area.icon}`
+                    `route-icon ${getAreaIcon(area.name)}`
                   }
                 >
 
-
                   {
-                    area.icon ===
-                    "downtown" &&
+                    getAreaIcon(area.name)
+                    ==="downtown" &&
                     <Store size={20}/>
                   }
 
 
                   {
-                    area.icon ===
-                    "pesisir" &&
+                    getAreaIcon(area.name)
+                    ==="pesisir" &&
                     <Waves size={20}/>
                   }
 
 
                   {
-                    area.icon ===
-                    "balantara" &&
+                    getAreaIcon(area.name)
+                    ==="balantara" &&
                     <Mountain size={20}/>
                   }
 
@@ -454,38 +258,31 @@ export default function Dashboard() {
                 </div>
 
 
-
                 <div className="route-content">
 
-
                   <h4>
-                    {area.name}
+                    {area.name} Area
                   </h4>
 
 
                   <p>
-
+                    {area.checked}
+                    /
                     {area.total}
-
                     {" Tenant"}
-
                   </p>
 
 
                   <div className="progress-line">
 
-
                     <div
-
                       className="progress-fill"
 
                       style={{
                         width:
-                          `${area.progress}%`
+                        `${area.progress}%`
                       }}
-
                     />
-
 
                   </div>
 
@@ -493,12 +290,9 @@ export default function Dashboard() {
                 </div>
 
 
-
-                <span className="route-percent">
-
+                <span className="route-percent positive">
 
                   {area.progress}%
-
 
                 </span>
 
@@ -508,23 +302,18 @@ export default function Dashboard() {
 
             </div>
 
-
           )
         )}
 
 
-
-
         <button
-
           className="route-btn"
 
-          onClick={() =>
+          onClick={()=>
             navigate(
               "/route-map"
             )
           }
-
         >
 
           Mulai Route
@@ -534,68 +323,52 @@ export default function Dashboard() {
         </button>
 
 
-
       </div>
-
-
-
 
 
       {selectedArea && (
 
-
         <div
-
           className="area-overlay"
 
-          onClick={() =>
+          onClick={()=>
             setSelectedArea(null)
           }
-
         >
 
-
           <div
-
             className="area-popup"
 
             onClick={(e)=>
               e.stopPropagation()
             }
-
           >
 
-
             <div className="popup-header">
-
 
               <div>
 
                 <h3>
                   {selectedArea.name}
+                  {" Area"}
                 </h3>
 
                 <p>
-
+                  {selectedArea.checked}
+                  /
                   {selectedArea.total}
-                  {" Tenant"}
-
+                  {" Tenant selesai"}
                 </p>
 
               </div>
 
 
-
               <button
-
                 className="popup-close"
 
-                onClick={() =>
-                  setSelectedArea(
-                    null
-                  )
+                onClick={()=>
+                  setSelectedArea(null)
                 }
-
               >
 
                 ✕
@@ -606,73 +379,67 @@ export default function Dashboard() {
             </div>
 
 
-
-
-
-            {selectedArea.tenants.map(
+            {
+              selectedArea.tenants.map(
               (tenant:any)=>(
 
-
                 <div
-
-                  key={
-                    tenant.id
-                  }
+                  key={tenant.id}
 
                   className="tenant-row"
 
-                  onClick={() =>
+                  onClick={()=>
                     navigate(
                       `/tenant-detail/${tenant.id}`
                     )
                   }
-
                 >
 
-
                   <div
-                    className="
-                      status-indicator
-                      pending
-                    "
+                    className={
+                    `
+                    status-indicator
+                    ${getStatusClass(
+                      tenant.status
+                    )}
+                    `
+                    }
                   />
 
 
                   <div className="tenant-row-info">
 
-
                     <h4>
-
                       {tenant.name}
-
                     </h4>
 
 
                     <p>
 
-                      {tenant.status}
+                      {
+                      tenant.status==="PENDING"
+                      ?"Belum Dicek"
+                      :tenant.status==="PROBLEM"
+                      ?"Kendala"
+                      :"Selesai"
+                      }
 
                     </p>
-
 
                   </div>
 
 
                 </div>
 
-
-              )
-            )}
+              ))
+            }
 
 
           </div>
 
-
         </div>
 
-
       )}
-
 
 
       <BottomNav/>
@@ -681,6 +448,5 @@ export default function Dashboard() {
     </MobileLayout>
 
   );
-
 
 }

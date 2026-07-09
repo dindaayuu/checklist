@@ -50,23 +50,24 @@ export default function Report() {
         hasReplacement;
         
         return{
-        id:item.id,
-        tenant:item.tenant,
-        area:item.area,
-        pic:item.pic,
-        time:item.finish_time,
-        status:hasProblem?"issue":"done",
-        detail:hasProblem
-        ?"Ada kendala / pergantian perangkat"
-        :"Semua perangkat normal",
-        devices:item.details.map((device:any)=>({
-        device:device.device,
-        barcode:device.barcode,
-        condition:device.condition,
-        problem:device.problem,
-        note:device.note,
-        replacement:device.replacement
-        }))
+          id:item.id,
+          tenant:item.tenant,
+          area:item.area,
+          pic:item.pic,
+          time:item.finish_time,
+          overall_note:item.overall_note,
+          status:hasProblem?"issue":"done",
+          detail:hasProblem
+            ?"Ada kendala / pergantian perangkat"
+            :"Semua perangkat normal",
+          devices:item.details.map((device:any)=>({
+            device:device.device,
+            barcode:device.barcode,
+            condition:device.condition,
+            problem:device.problem,
+            note:device.note,
+            replacement:device.replacement
+          }))
         };
         
         });
@@ -571,6 +572,17 @@ export default function Report() {
 
             </div>
 
+            {selectedReport.overall_note&&(
+              <div className="note-card">
+                <h4>
+                  Catatan Kondisi Tenant
+                </h4>
+
+                <p>
+                  {selectedReport.overall_note}
+                </p>
+              </div>
+            )}
 
             <button
               className="close-button"
