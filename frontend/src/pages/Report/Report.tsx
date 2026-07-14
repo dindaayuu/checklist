@@ -23,6 +23,7 @@ import {
 export default function Report() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [reports, setReports] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
   const [selectedReport, setSelectedReport] = useState<any>(null);
   const [expandedDeviceId, setExpandedDeviceId] = useState<any>(null);
 
@@ -91,19 +92,31 @@ export default function Report() {
   },[]);
 
 
-  const filteredReports = reports.filter((item:any) => {
+  const filteredReports = reports.filter((item:any)=>{
 
-    if(activeFilter === "issue"){
-      return item.status === "issue";
-    }
+    const keyword = search.toLowerCase();
 
-    if(activeFilter === "done"){
-      return item.status === "done";
-    }
+    const matchSearch =
 
-    return true;
+        item.tenant.toLowerCase().includes(keyword) ||
 
-  });
+        item.area.toLowerCase().includes(keyword) ||
+
+        item.pic.toLowerCase().includes(keyword) ||
+
+        item.status.toLowerCase().includes(keyword);
+
+    const matchFilter =
+
+        activeFilter==="all" ||
+
+        (activeFilter==="issue" && item.status==="issue") ||
+
+        (activeFilter==="done" && item.status==="done");
+
+    return matchSearch && matchFilter;
+
+});
 
   useEffect(() => {
     if(!selectedReport){
@@ -167,8 +180,10 @@ export default function Report() {
           <Search size={18}/>
 
           <input
-            type="text"
-            placeholder="Cari tenant..."
+              type="text"
+              placeholder="Cari tenant, area, PIC..."
+              value={search}
+              onChange={(e)=>setSearch(e.target.value)}
           />
         </div>
 
@@ -247,8 +262,14 @@ export default function Report() {
                 </h3>
 
                 <p>
-                  {item.area}
-                </p>
+
+                {item.area}
+
+                <br/>
+
+    PIC : {item.pic}
+
+</p>
 
               </div>
 
