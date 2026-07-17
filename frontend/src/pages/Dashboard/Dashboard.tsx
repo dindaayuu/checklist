@@ -384,15 +384,13 @@ export default function Dashboard() {
               (tenant:any)=>(
 
                 <div
-                  key={tenant.id}
+                key={tenant.code}
 
-                  className="tenant-row"
-
-                  onClick={()=>
+                onClick={() =>
                     navigate(
-                      `/tenant-detail/${tenant.id}`
+                        `/tenant-detail/${tenant.code}`
                     )
-                  }
+                }
                 >
 
                   <div
